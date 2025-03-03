@@ -1,0 +1,46 @@
+<div class="calendar-container">
+  <div class="calendar-controls">
+    <app-date-picker (dateSelected)="onDateSelected($event)"></app-date-picker>
+    <button mat-raised-button color="primary" (click)="addAppointment()" (keyup.enter)="addAppointment()" aria-label="Add Event">
+      Add Event
+    </button>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="calendar-corner"></div>
+
+    <div *ngFor="let day of daysOfWeek" class="calendar-day" [class.current-day]="isCurrentDate(day.date)">
+      {{ day.name }}<br>{{ day.date | date: 'd' }}
+    </div>
+
+    <div class="hours-column">
+      <div *ngFor="let hour of hoursOfDay" class="calendar-hour" [class.current-hour]="isCurrentHour(hour) && isCurrentDate(selectedDate)">
+        {{ hour }}
+      </div>
+    </div>
+
+    <div class="calendar-days">
+      <div *ngFor="let day of daysOfWeek" class="calendar-day-column">
+        <div *ngFor="let hour of hoursOfDay" class="calendar-cell"
+             (dragover)="onDragOver($event)"
+             (drop)="onDrop($event, day.date, hour)"
+             (click)="handleCellClick($event, day.date, hour)"
+             (keydown.enter)="handleCellClick($event, day.date, hour)"
+             tabindex="0">
+          <div *ngFor="let app of getAppointmentsForCell(day.date, hour); let i = index" class="appointment"
+               [style.height.px]="getAppointmentHeight(app.duration)"
+               [style.width]="getAppointmentWidth(day.date, hour)"
+               [style.left]="getAppointmentPosition(day.date, hour, i)"
+               draggable="true"
+               (dragstart)="onDragStart($event, app)">
+            <div class="appointment-title">{{ app.title }}</div>
+            <div class="appointment-time">
+              {{ getFormattedTime(app.date) }}-{{ getFormattedEndTime(app.date, app.duration) }}
+            </div>
+            <div class="resize-handle" (mousedown)="onResizeStart($event, app)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

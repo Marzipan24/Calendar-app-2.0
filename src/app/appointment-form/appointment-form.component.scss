@@ -1,0 +1,88 @@
+.dialog-container {
+    padding: 18px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .dialog-container.expanded {
+    width: 70%; /* Расширенная ширина */
+    height: 100vh; /* На всю высоту экрана */
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .expand-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .dialog-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #3f51b5;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-field {
+    width: 100%;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 8px;
+    justify-content: space-around;
+  }
+
+  button {
+    width: 100%;
+  }
+  
+  button[mat-raised-button] {
+    background-color: #3f51b5;
+    color: white;
+  }
+  
+  button[mat-button] {
+    color: #3f51b5;
+  }
+
+  .time-display {
+    display: flex;
+    gap: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    .dialog-container {
+      padding: 16px;
+    }
+  
+    .dialog-title {
+      font-size: 20px;
+    }
+  
+    .form-field {
+      width: 100%;
+    }
+  
+    .button-container {
+      flex-direction: column;
+      gap: 8px;
+    }
+  
+    button[mat-raised-button],
+    button[mat-button] {
+      width: 100%;
+    }
+  }
