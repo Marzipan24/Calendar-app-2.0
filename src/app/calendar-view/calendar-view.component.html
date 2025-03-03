@@ -35,7 +35,7 @@
                (dragstart)="onDragStart($event, app)">
             <div class="appointment-title">{{ app.title }}</div>
             <div class="appointment-time">
-              {{ getFormattedTime(app.date) }}-{{ getFormattedEndTime(app.date, app.duration) }}
+              {{ app.date | formattedTime:app.duration }}-{{ app.date | formattedEndTime: app.duration }}
             </div>
             <div class="resize-handle" (mousedown)="onResizeStart($event, app)"></div>
           </div>

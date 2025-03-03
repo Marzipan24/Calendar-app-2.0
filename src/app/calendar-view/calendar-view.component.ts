@@ -5,7 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
-
+import { FormattedTimePipe } from '../formatted-time.pipe';
+import { FormattedEndTimePipe } from '../formatted-endtime.pipe';
 interface Appointment {
   id: number;
   title: string;
@@ -16,7 +17,7 @@ interface Appointment {
 @Component({
   selector: 'app-calendar-view',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, DatePickerComponent],
+  imports: [CommonModule, MatButtonModule, MatIconModule, DatePickerComponent, FormattedTimePipe, FormattedEndTimePipe],
   templateUrl: './calendar-view.component.html',
   styleUrls: ['./calendar-view.component.scss']
 })
@@ -72,37 +73,6 @@ export class CalendarViewComponent {
     const hourHeight = 55.56;
     return duration * hourHeight;
   }
-
-  getFormattedTime(date: Date, duration = 0): string {
-    date.setMinutes(0);
-  
-    if (duration > 0) {
-      const extraMinutes = Math.round((duration % 1) * 60 / 15) * 15;
-      date.setMinutes(extraMinutes);
-    }
-  
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    
-    return `${hours}:${minutes}`;
-  }
-  
-  
-  getFormattedEndTime(startDate: Date, duration: number): string {
-    const endDate = new Date(startDate);
-    
-    endDate.setHours(endDate.getHours() + Math.floor(duration));
-    endDate.setMinutes(0);
-  
-    const extraMinutes = Math.round((duration % 1) * 60 / 15) * 15;
-    endDate.setMinutes(extraMinutes);
-  
-    const hours = endDate.getHours().toString().padStart(2, '0');
-    const minutes = endDate.getMinutes().toString().padStart(2, '0');
-    
-    return `${hours}:${minutes}`;
-  }
-  
 
   isAppointmentInCell(app: Appointment, day: Date, hour: string): boolean {
     const appointmentStart = new Date(app.date);
