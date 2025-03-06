@@ -1,0 +1,54 @@
+<div class="modal-content">
+  <h2>{{ isEditing ? 'Edit Event' : 'Add Event' }}</h2>
+
+  <form [formGroup]="eventForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Event Title</mat-label>
+      <input matInput type="text" placeholder="Event Title" formControlName="title" />
+      <mat-error *ngIf="!isEditing && eventForm?.get('title')?.invalid">Required</mat-error>
+    </mat-form-field>
+
+    <div *ngIf="!isEditing">
+      <mat-form-field appearance="fill">
+        <mat-label>Day</mat-label>
+        <mat-select formControlName="day">
+          <mat-option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!isEditing && eventForm?.get('day')?.invalid">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Start Time</mat-label>
+        <mat-select formControlName="startTime">
+          <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!isEditing && eventForm?.get('startTime')?.invalid">Required</mat-error>
+      </mat-form-field>
+    
+      <mat-form-field appearance="fill">
+        <mat-label>End Time</mat-label>
+        <mat-select formControlName="endTime">
+          <mat-option *ngFor="let hour of hours" [value]="hour">{{ hour }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="!isEditing && eventForm?.get('endTime')?.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="!isEditing && eventForm?.get('endTime')?.hasError('invalidEndTime')">
+          End Time must be after Start Time
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Event Color</mat-label>
+      <input matInput type="color" formControlName="color" />
+      <mat-error *ngIf="!isEditing && eventForm?.get('color')?.invalid">Required</mat-error>
+    </mat-form-field>
+
+    <div class="btns">
+      <button mat-raised-button color="primary" (click)="onSave()">
+        {{ isEditing ? 'Save' : 'Add' }}
+      </button>
+      <button mat-raised-button color="warn" *ngIf="isEditing" (click)="onDelete()">Delete</button>
+      <button mat-raised-button (click)="onClose()">Cancel</button>
+    </div>
+  </form>
+</div>

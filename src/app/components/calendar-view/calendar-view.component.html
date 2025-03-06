@@ -1,0 +1,67 @@
+<div class="calendar-container">
+  <div class="add-event">
+    <app-date-picker (dateSelected)="onDateSelected($event)"></app-date-picker>
+    <button mat-raised-button color="primary" (click)="openEventModal('add')">
+      + Add Event
+    </button>
+  </div>
+
+  <div class="calendar">
+    <div class="header">
+      <div class="time-column"></div>
+      <ng-container *ngFor="let day of daysOfWeek">
+        <div class="day-header">
+          <div class="day-name">{{ getDayName(day) }}</div>
+          <div class="date">{{ getDate(day) }}</div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="body" cdkDropListGroup>
+      <ng-container *ngFor="let hour of hours">
+        <div class="row">
+          <div class="time-column">{{ hour }}</div>
+          <ng-container *ngFor="let day of daysOfWeek">
+            <div
+              cdkDropList
+              [cdkDropListData]="(calendar$ | async)?.[day]?.[hour]"
+              class="event-cell"
+              (cdkDropListDropped)="drop($event)"
+              [id]="hour">
+              <ng-container *ngFor="let event of (calendar$ | async)?.[day]?.[hour]">
+                <div
+                class="event-box"
+                cdkDrag
+                [cdkDragData]="event"
+                [ngStyle]="{
+                  'background-color': event.color,
+                  'height': calculateEventHeight(event.startTime, event.endTime) + 'px',
+                  'width': calculateEventWidth((calendar$ | async)?.[day]?.[hour]),
+                  'left': calculateEventPosition((calendar$ | async)?.[day]?.[hour], event).left
+                }"
+                (click)="openEventModal('edit', event, day, hour)"
+                (keydown)="openEventModal('edit', event, day, hour)"
+                tabindex="0">
+                <div class="event-title">  {{ event.title.length > 15 ? (event.title | slice:0:15) + '...' : event.title }}</div>
+                <div class="event-time">{{ event.startTime }} - {{ event.endTime }}</div>
+                <div class="resize-handle" (mousedown)="startResize(event, $event)"></div>
+              </div>              
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<app-event-modal
+  *ngIf="isEventModalOpen$ | async"
+  [isEditing]="isEditing$ | async"
+  [currentEvent]="currentEvent$ | async"
+  [daysOfWeek]="daysOfWeek"
+  [hours]="hours"
+  (saveEvent)="onSaveEvent($event)"
+  (deleteEvent)="onDeleteEvent()"
+  (closeModal)="closeEventModal()">
+</app-event-modal>
